@@ -1,91 +1,226 @@
 <div class="footer-middle">
-	<div class="container-fluid">
+	<div class="container">
 		<div class="row">
-			<div class="col-lg-3">
+			<!-- Contact Information -->
+			<div class="col-lg-3 col-md-6 col-sm-12 mb-4">
 				<div class="widget">
 					<h4 class="widget-title pb-2 mb-1">Kontak Kami</h4>
 					<ul class="contact-info">
 						<li>
-							<span class="contact-info-label">Alamat:</span>Jl. Komp. Listrik, Utan Panjang, Kec. Kemayoran, Kota Jakarta Pusat, Jawa Timur 16451
+							<span class="contact-info-label">Alamat:</span>
+							Jl. Komp. Listrik, Utan Panjang, Kec. Kemayoran, Kota Jakarta Pusat, Jawa Timur 16451
 						</li>
 						<li>
-							<span class="contact-info-label">Phone:</span>0877-1681-6892
+							<span class="contact-info-label">Phone:</span>
+							<a href="tel:+6287716816892">0877-1681-6892</a>
 						</li>
 					</ul>
+
+					<!-- Social Media Links -->
+					<div class="social-media-section">
+						<h5 class="social-title">Follow Us</h5>
+						<div class="social-icons">
+							<a href="https://instagram.com" class="social-icon" target="_blank">
+								<img src="{{ asset('instagram.png') }}" alt="Instagram">
+							</a>
+							<a href="https://www.tiktok.com" class="social-icon" target="_blank">
+								<img src="{{ asset('tiktok.png') }}" alt="TikTok">
+							</a>
+							<a href="https://shopee.co.id" class="social-icon" target="_blank">
+								<img src="{{ asset('shopee.png') }}" alt="Shopee">
+							</a>
+							<a href="https://wa.me/6287716816892" class="social-icon" target="_blank">
+								<img src="{{ asset('whatsapp.png') }}" alt="WhatsApp">
+							</a>
+						</div>
+					</div>
 				</div>
-				<!-- End .widget -->
 			</div>
-			<!-- End .col-lg-3 -->
 
-			<div class="col-lg-9">
-				<div class="row footer-content">
-					<div class="col-lg-4">
-						<div class="widget">
-							<h4 class="widget-title">My Account</h4>
-
-							<div class="row">
-								<div class="col-sm-6">
-									<ul class="links mb-0">
-										@if(!empty(session('auth_user')))
-										<li><a href="{{ URL::to('profil') }}" class="">Profil</a></li>
-										<li><a href="{{ URL::to('logout-user') }}" class="">Logout</a></li>
-										@else
-										<li><a href="{{ URL::to('login-user') }}" class="">Login</a></li>
-										@endif
-									</ul>
-								</div>
-								<!-- End .col-sm-6 -->
-							</div>
-							<!-- End .row -->
-						</div>
-						<!-- End .widget -->
-					</div>
-					<!-- End .col-md-4 -->
-
-					<div class="col-lg-5 mb-sm-2">
-						<div class="widget">
-							<h4 class="widget-title">Cabang Kami</h4>
-							@php $cabangKami = getToko(); @endphp
-							<div class="row">
-								<div class="col-sm-12">
-									<ul class="links mb-0">
-										@foreach ($cabangKami as $valCabang)
-										<li><a href="#">{{ $valCabang->cabang }}</a></li>
-										@endforeach
-									</ul>
-								</div>
-							</div>
-							<!-- End .row -->
-						</div>
-						<!-- End .widget -->
-					</div>
-					<!-- End .col-md-5 -->
-
-					<div class="col-lg-3">
-						<div class="widget widget-time">
-							<h4 class="widget-title mb-1">Working Days/Hours</h4>
-							<ul class="contact-info">
-								<li>
-									Mon - Sun / 9:00AM - 8:00PM
-								</li>
-							</ul>
-						</div>
-						<!-- End .widget -->
-					</div>
-					<!-- End .col-md-33 -->
+			<!-- My Account Section -->
+			<div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+				<div class="widget">
+					<h4 class="widget-title">My Account</h4>
+					<ul class="links">
+						@if(!empty(session('auth_user')))
+						<li><a href="{{ URL::to('profil') }}">Profil</a></li>
+						<li><a href="{{ URL::to('logout-user') }}">Logout</a></li>
+						@else
+						<li><a href="{{ URL::to('login-user') }}">Login</a></li>
+						@endif
+					</ul>
 				</div>
-				<!-- End .row -->
-
-				<div class="footer-bottom d-sm-flex align-items-center">
-					<div class="footer-left">
-						<span class="footer-copyright">Toko Rendy Parfum. © 2021 All Rights Reserved</span>
-					</div>
-				</div>
-				<!-- End .footer-bottom -->
 			</div>
-			<!-- End .col-lg-9 -->
+
+			<!-- Store Branches -->
+			<div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+				<div class="widget">
+					<h4 class="widget-title">Cabang Kami</h4>
+					@php $cabangKami = getToko(); @endphp
+					<ul class="links">
+						@foreach ($cabangKami as $valCabang)
+						<li><a href="#">{{ $valCabang->cabang }}</a></li>
+						@endforeach
+					</ul>
+				</div>
+			</div>
+
+			<!-- Working Hours -->
+			<div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+				<div class="widget">
+					<h4 class="widget-title">Working Days/Hours</h4>
+					<ul class="contact-info">
+						<li>Mon - Sun / 9:00AM - 8:00PM</li>
+					</ul>
+				</div>
+			</div>
 		</div>
-		<!-- End .row -->
+
+		<!-- Footer Bottom -->
+		<div class="footer-bottom text-center">
+			<span class="footer-copyright">Toko Rendy Parfum. © 2024 All Rights Reserved</span>
+		</div>
 	</div>
-	<!-- End .container-fluid -->
 </div>
+
+<style>
+	.footer-middle {
+		background: #232529;
+		color: white;
+		padding: 40px 0;
+	}
+
+	.widget {
+		text-align: center;
+	}
+
+	.widget-title {
+		font-size: 18px;
+		font-weight: 600;
+		margin-bottom: 15px;
+	}
+
+	.contact-info li {
+		font-size: 14px;
+		margin-bottom: 5px;
+	}
+
+	.contact-info a {
+		color: #ff7272;
+		text-decoration: none;
+	}
+
+	.contact-info a:hover {
+		text-decoration: underline;
+	}
+
+	.links {
+		list-style: none;
+		padding: 0;
+	}
+
+	.links li {
+		margin-bottom: 5px;
+	}
+
+	.links a {
+		color: white;
+		text-decoration: none;
+	}
+
+	.links a:hover {
+		color: #ff7272;
+	}
+
+	/* Social Media Section */
+	.social-media-section {
+		text-align: center;
+		margin-top: 15px;
+	}
+
+	/* Title for Social Media */
+	.social-title {
+		font-size: 18px;
+		font-weight: bold;
+		color: white;
+		margin-bottom: 10px;
+	}
+
+	/* Social Icons - Ensure One Line Layout */
+	.social-icons {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-wrap: nowrap;
+		gap: 12px;
+		overflow: hidden;
+	}
+
+	/* Social Icons Styling */
+	.social-icon img {
+		width: 40px;
+		/* Default size for desktop */
+		height: auto;
+		border-radius: 0 !important;
+		/* Ensure no border circle */
+		background: transparent;
+		transition: transform 0.3s ease;
+	}
+
+	/* Hover Effect */
+	.social-icon img:hover {
+		transform: scale(1.1);
+	}
+
+	/* Mobile Responsiveness */
+	@media (max-width: 768px) {
+		.social-icons {
+			gap: 8px;
+		}
+
+		.social-icon img {
+			width: 35px;
+			/* Smaller icons on mobile */
+		}
+	}
+
+	.footer-bottom {
+		margin-top: 30px;
+		padding: 10px 0;
+		border-top: 1px solid #444;
+	}
+
+	@media (max-width: 768px) {
+		.footer-middle .row {
+			text-align: center;
+		}
+
+		.social-icons {
+			justify-content: center;
+		}
+
+		.social-icon img {
+			width: 40px;
+		}
+	}
+
+	.footer-bottom {
+		margin-top: 30px;
+		padding: 10px 0;
+		border-top: 1px solid #444;
+	}
+
+	@media (max-width: 768px) {
+		.footer-middle .row {
+			text-align: center;
+		}
+
+		.social-icons {
+			justify-content: center;
+		}
+
+		.social-icon img {
+			width: 40px;
+		}
+	}
+</style>

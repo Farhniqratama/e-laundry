@@ -12,14 +12,17 @@
         <h2 class="section-title">Produk Kami</h2>
         <div class="products">
             <div class="row">
-            @foreach ($produk as $valProduk)
+                @if(!empty($produk[0]))
+                @foreach ($produk as $valProduk)
                 <div class="product-default inner-icon col-lg-3">
                     <figure>
                         <a href="{{ URl::to('produk-detail/'.$valProduk->id) }}">
-                            <img src="{{ asset('upload/produk/'.$valProduk->gambar) }}" width="400" height="400" alt="product" />
+                            <img src="{{ asset('upload/produk/'.$valProduk->gambar) }}" width="400" height="400"
+                                alt="product" />
                         </a>
                         <div class="btn-icon-group">
-                            <a href="{{ URL::to('add-to-cart/'.$valProduk->id) }}" class="btn-icon product-type-simple"><i class="icon-shopping-cart"></i></a>
+                            <a href="{{ URL::to('add-to-cart/'.$valProduk->id) }}"
+                                class="btn-icon product-type-simple"><i class="icon-shopping-cart"></i></a>
                         </div>
                     </figure>
                     <div class="product-details">
@@ -46,7 +49,12 @@
                     </div>
                     <!-- End .product-details -->
                 </div>
-            @endforeach
+                @endforeach
+                @else
+                <div class="product-default inner-icon col-lg-12">
+                    <h2 style="text-align: center;">Cooming Soon</h2>
+                </div>
+                @endif
             </div>
         </div>
 

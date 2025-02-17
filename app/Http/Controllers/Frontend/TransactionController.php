@@ -23,7 +23,21 @@ class TransactionController extends Controller
 {
     public function cart()
     {
-        $dataCart = Cart::join('produk as p', 'p.id', '=', 'cart.produk_id')->join('gambar_produk', 'gambar_produk.produk_id', 'p.id')->select('cart.*', 'p.nama_produk', 'p.harga', 'p.deskripsi', 'gambar_produk.gambar')->where('user_id', session('auth_user')['pelanggan_id'])->where('is_thumbnails', 1)->get()->all();
+        // Ensure session exists and has pelanggan_id
+        if (!session()->has('auth_user') || !isset(session('auth_user')['pelanggan_id'])) {
+            return redirect('login-user')->with('error', 'Silakan login terlebih dahulu.');
+        }
+
+        $userId = session('auth_user')['pelanggan_id'];
+
+        // Retrieve cart items safely
+        $dataCart = Cart::join('produk as p', 'p.id', '=', 'cart.produk_id')
+            ->join('gambar_produk', 'gambar_produk.produk_id', '=', 'p.id')
+            ->select('cart.*', 'p.nama_produk', 'p.harga', 'p.deskripsi', 'gambar_produk.gambar')
+            ->where('cart.user_id', $userId)
+            ->where('gambar_produk.is_thumbnails', 1)
+            ->get(); // No need for ->all(), because ->get() already returns a collection
+
         return view('frontend.transaksi.cart', compact('dataCart'));
     }
 
@@ -90,17 +104,40 @@ class TransactionController extends Controller
 
     public function checkout()
     {
-        $dataCart = Cart::join('produk as p', 'p.id', '=', 'cart.produk_id')->select('cart.*', 'p.nama_produk', 'p.harga', 'p.deskripsi', 'p.id as produk_id')->where('user_id', session('auth_user')['pelanggan_id'])->get()->all();
-
-        foreach ($dataCart as $key => $value) {
-            $gambarProduk = GambarProduk::where('produk_id', $value->produk_id)->where('is_thumbnails', 1)->first();
-            $dataCart[$key]->gambar_produk = $gambarProduk->gambar;
+        // Ensure the user is logged in before accessing session data
+        if (!session()->has('auth_user') || !isset(session('auth_user')['pelanggan_id'])) {
+            return redirect('login-user')->with('error', 'Silakan login terlebih dahulu.');
         }
-        $detailData = Pelanggan::where('id', session('auth_user')['pelanggan_id'])->first();
-        $alamat = AlamatPelanggan::where('pelanggan_id', session('auth_user')['pelanggan_id'])->first();
-        $provinsi = Provinsi::get();
-        $kota = Kota::get();
-        $botol = Botol::get();
+
+        $userId = session('auth_user')['pelanggan_id'];
+
+        // Retrieve cart items safely
+        $dataCart = Cart::join('produk as p', 'p.id', '=', 'cart.produk_id')
+            ->select('cart.*', 'p.nama_produk', 'p.harga', 'p.deskripsi', 'p.id as produk_id')
+            ->where('cart.user_id', $userId)
+            ->get(); // No need for ->all(), since ->get() already returns a collection
+
+        // Attach product images safely
+        foreach ($dataCart as $cartItem) {
+            $gambarProduk = GambarProduk::where('produk_id', $cartItem->produk_id)
+                ->where('is_thumbnails', 1)
+                ->first();
+
+            // Ensure the image exists before assigning it
+            $cartItem->gambar_produk = $gambarProduk ? $gambarProduk->gambar : 'default-image.jpg';
+        }
+
+        // Get user details, ensuring it exists
+        $detailData = Pelanggan::find($userId);
+
+        // Get user address safely
+        $alamat = AlamatPelanggan::where('pelanggan_id', $userId)->first() ?? new AlamatPelanggan();
+
+        // Get location & bottle data
+        $provinsi = Provinsi::all();
+        $kota = Kota::all();
+        $botol = Botol::all();
+
         return view('frontend.transaksi.checkout', compact('dataCart', 'detailData', 'provinsi', 'alamat', 'kota', 'botol'));
     }
 
@@ -127,6 +164,8 @@ class TransactionController extends Controller
                 $dt->qty = $value->qty;
                 $dt->botol_id = $request->botol_id;
                 $dt->save();
+
+
             }
 
             $cek = AlamatPelanggan::where('pelanggan_id', session('auth_user')['pelanggan_id'])->first();
@@ -154,7 +193,7 @@ class TransactionController extends Controller
 
                 $merchantCode = 'DS21282'; // dari duitku
                 $merchantKey = 'e96dde4cff42bb75086effa0550ff25c'; // dari duitku
-                $jj = (int)$request->total_pembayaran;
+                $jj = (int) $request->total_pembayaran;
                 $timestamp = round(microtime(true) * 1000); //in milisecond
                 $paymentAmount = $jj;
 
@@ -166,7 +205,7 @@ class TransactionController extends Controller
                 $merchantUserInfo = ''; // opsional
                 $customerVaName = $pelanggan->nama_lengkap; // menampilkan nama pelanggan pada tampilan konfirmasi bank
                 $callbackUrl = 'https://php82.aplikasiskripsi.com/rendy_parfume/calback'; // url untuk callback
-                $returnUrl = 'https://php82.aplikasiskripsi.com/rendy_parfume/'; //'http://example.com/return'; // url untuk redirect
+                $returnUrl = 'https://php82.aplikasiskripsi.com/rendy_parfume/';//'http://example.com/return'; // url untuk redirect
                 $expiryPeriod = 10; // untuk menentukan waktu kedaluarsa dalam menit
                 $signature = hash('sha256', $merchantCode . $timestamp . $merchantKey);
                 //$paymentMethod = 'VC'; //digunakan untuk direksional pembayaran
@@ -208,6 +247,7 @@ class TransactionController extends Controller
                         'price' => $request->harga[$keys],
                         'quantity' => $request->qty[$keys]
                     );
+
                 }
 
 
@@ -325,7 +365,7 @@ class TransactionController extends Controller
         $kota = Kota::where('id', $dataUser->kota_id)->first();
         $merchantCode = 'DS21282'; // dari duitku
         $merchantKey = 'e96dde4cff42bb75086effa0550ff25c'; // dari duitku
-        $jj = (int)$dataTransaksi->total_pembayaran;
+        $jj = (int) $dataTransaksi->total_pembayaran;
         $timestamp = round(microtime(true) * 1000); //in milisecond
         $paymentAmount = $jj;
 
@@ -337,7 +377,7 @@ class TransactionController extends Controller
         $merchantUserInfo = ''; // opsional
         $customerVaName = $dataUser->nama; // menampilkan nama pelanggan pada tampilan konfirmasi bank
         $callbackUrl = 'https://php82.aplikasiskripsi.com/rendy_parfum/calback'; // url untuk callback
-        $returnUrl = 'https://php82.aplikasiskripsi.com/rendy_parfum/'; //'http://example.com/return'; // url untuk redirect
+        $returnUrl = 'https://php82.aplikasiskripsi.com/rendy_parfum/';//'http://example.com/return'; // url untuk redirect
         $expiryPeriod = 10; // untuk menentukan waktu kedaluarsa dalam menit
         $signature = hash('sha256', $merchantCode . $timestamp . $merchantKey);
         //$paymentMethod = 'VC'; //digunakan untuk direksional pembayaran
@@ -380,6 +420,7 @@ class TransactionController extends Controller
                 'price' => $values->harga,
                 'quantity' => $values->qty
             );
+
         }
 
         //debugCode($itemDetails);
@@ -491,9 +532,9 @@ class TransactionController extends Controller
         $data = Transaksi::where('id', $request->id_transaksi)->first();
         $data->status = 1;
         if ($request->hasfile('image')) {
-            $extension       = $request->file('image')->getClientOriginalExtension();
+            $extension = $request->file('image')->getClientOriginalExtension();
             $fileNameToStore = time() . "." . $extension;
-            $path            = public_path('images/bukti_bayar');
+            $path = public_path('images/bukti_bayar');
             $request->file('image')->move($path, $fileNameToStore);
 
             $data->bukti_tf = $fileNameToStore;
@@ -514,7 +555,7 @@ class TransactionController extends Controller
         }
         $cek->save();
 
-        return redirect('histori-transaksi')->with('success', 'Pembayaran berhasil dilakukan');
+        return view('frontend.transaksi.historiTransaksi');
     }
 
     public function historiTransaksi()
@@ -584,9 +625,9 @@ class TransactionController extends Controller
         $as = new Retur;
         $as->transaksi_id = $request->id_transaksi;
         if ($request->hasfile('image')) {
-            $extension       = $request->file('image')->getClientOriginalExtension();
+            $extension = $request->file('image')->getClientOriginalExtension();
             $fileNameToStore = time() . "." . $extension;
-            $path            = public_path('images/retur');
+            $path = public_path('images/retur');
             $request->file('image')->move($path, $fileNameToStore);
 
             $as->gambar = $fileNameToStore;
@@ -620,10 +661,10 @@ class TransactionController extends Controller
     public function getKurir(Request $request)
     {
         $data['param'] = array(
-            'origin_city'         => $request->asal,
-            'destination_sub'    => $request->tujuan,
-            'item_weight'        => $request->berat,
-            'type'                => $request->kurir,
+            'origin_city' => $request->asal,
+            'destination_sub' => $request->tujuan,
+            'item_weight' => $request->berat,
+            'type' => $request->kurir,
         );
         $dataOngkir = $this->getOngkir($data['param']);
 
@@ -706,4 +747,5 @@ class TransactionController extends Controller
 
         return redirect('histori-transaksi')->with('success', 'Pembayaran berhasil dilakukan');
     }
+
 }
