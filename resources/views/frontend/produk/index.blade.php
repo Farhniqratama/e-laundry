@@ -52,7 +52,7 @@
                 @endforeach
                 @else
                 <div class="product-default inner-icon col-lg-12">
-                    <h2 style="text-align: center;">Cooming Soon</h2>
+                    <h2 style="text-align: center;">Coming Soon</h2>
                 </div>
                 @endif
             </div>

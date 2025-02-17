@@ -75,6 +75,51 @@
             justify-self: center;
             margin-top: 20px;
         }
+
+        /* Sticky Navbar Category Dropdown */
+        .sticky-category {
+            position: relative;
+        }
+
+        .sticky-category-dropdown {
+            display: none;
+            position: absolute;
+            bottom: 50px;
+            /* Adjust to position above navbar */
+            left: 0;
+            background: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            list-style: none;
+            padding: 10px;
+            min-width: 160px;
+            z-index: 1001;
+        }
+
+        .sticky-category-dropdown li {
+            padding: 10px;
+            font-size: 14px;
+        }
+
+        .sticky-category-dropdown li a {
+            text-decoration: none;
+            color: #333;
+            display: block;
+        }
+
+        .sticky-category-dropdown li:hover {
+            background: #f0f0f0;
+        }
+
+        /* Fix for mobile responsiveness */
+        @media (max-width: 768px) {
+            .sticky-category-dropdown {
+                bottom: 40px;
+                left: 50%;
+                transform: translateX(-50%);
+                min-width: 180px;
+            }
+        }
     </style>
     <style>
         /* Chat Button */
@@ -297,11 +342,38 @@
                 <i class="icon-bag-3"></i>Produk
             </a>
         </div>
-        <div class="sticky-info">
-            <a href="{{ URL::to('kategori-produk') }}" class="">
-                <i class="icon-bars"></i>Kategori
+        <div class="sticky-info sticky-category">
+            <a href="javascript:void(0);" id="sticky-category-button">
+                <i class="icon-bars"></i> Kategori
             </a>
+            <ul id="sticky-category-menu" class="sticky-category-dropdown">
+                @foreach ($dataCategories as $dc)
+                <li>
+                    <a href="{{ URL::to('produk-by-kategori/'.$dc->id) }}">
+                        {{ $dc->nama_kategori }}
+                    </a>
+                </li>
+                @endforeach
+            </ul>
         </div>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const categoryButton = document.getElementById('sticky-category-button');
+                const categoryMenu = document.getElementById('sticky-category-menu');
+        
+                categoryButton.addEventListener('click', function (event) {
+                    event.stopPropagation(); // Prevent immediate closing
+                    categoryMenu.style.display = (categoryMenu.style.display === 'block') ? 'none' : 'block';
+                });
+        
+                // Close dropdown when clicking outside
+                document.addEventListener('click', function (event) {
+                    if (!categoryButton.contains(event.target) && !categoryMenu.contains(event.target)) {
+                        categoryMenu.style.display = 'none';
+                    }
+                });
+            });
+        </script>
 
         <div class="sticky-info">
             @if(!empty(session('auth_user')))
