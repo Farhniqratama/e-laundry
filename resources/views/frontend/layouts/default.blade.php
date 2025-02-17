@@ -368,7 +368,7 @@
             const chatMessages = document.getElementById('chat-messages');
     
             let isDragging = false;
-            let offsetX, offsetY;
+            let startX, startY, initialX, initialY;
     
             // Open Chat Window
             chatButton.addEventListener('click', () => {
@@ -433,11 +433,8 @@
             setInterval(loadMessages, 3000);
             loadMessages();
     
-            // Make Chat Button Draggable
+            // Make Chat Button Draggable & Snap to Side
             function makeButtonDraggable(button) {
-                let isDragging = false;
-                let startX, startY, initialX, initialY;
-    
                 function startDrag(e) {
                     isDragging = true;
                     startX = e.type.includes("mouse") ? e.clientX : e.touches[0].clientX;
@@ -472,18 +469,30 @@
                 }
     
                 function stopDrag() {
+                    if (!isDragging) return;
                     isDragging = false;
                     document.removeEventListener("mousemove", moveButton);
                     document.removeEventListener("mouseup", stopDrag);
                     document.removeEventListener("touchmove", moveButton);
                     document.removeEventListener("touchend", stopDrag);
+    
+                    // Snap the button to the closest side (left or right)
+                    const buttonRect = button.getBoundingClientRect();
+                    const middleX = window.innerWidth / 2;
+                    let finalX = buttonRect.left < middleX ? 10 : window.innerWidth - button.offsetWidth - 10; // Snap left or right
+    
+                    button.style.left = `${finalX}px`;
+                    button.style.transition = "left 0.2s ease-out"; // Smooth transition
+                    setTimeout(() => {
+                        button.style.transition = ""; // Reset transition
+                    }, 200);
                 }
     
                 button.addEventListener("mousedown", startDrag);
                 button.addEventListener("touchstart", startDrag, { passive: true });
             }
     
-            // Enable Draggable Chat Button
+            // Enable Draggable Chat Button with Auto-Snap
             makeButtonDraggable(chatButton);
         });
     </script>
