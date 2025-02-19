@@ -2,16 +2,16 @@
 @extends('layouts.default')
 @section('title', __( 'Home' ))
 @section('content')
-	
+
 <div class="row">
     <div class="col-lg-12 mb-4 order-0">
         <div class="card">
             <div class="d-flex align-items-end row">
                 <div class="col-sm-12">
                     <div class="card-body">
-                        <h5 class="card-title" style="font-weight: bold;">SELAMAT DATANG DI TOKO RENDY PARFUM!</h5>
-                        <p class="mb-4">Toko Rendy Radyt Parfum Refill yang berlokasi di Kecamatan Kemayoran, Jakarta Pusat merupakan usaha yang menyediakan produk berupa parfum. Saat ini, proses pengelolaan data transaksi di toko tersebut masih dilakukan secara manual yaitu menggunakan buku catatan.</p>
-                        
+                        <h5 class="card-title" style="font-weight: bold;">SELAMAT DATANG DI TAMA PARFUME!</h5>
+                        <p class="mb-4">Proyek Toko yang akan datang pada tahun 2026.</p>
+
                     </div>
                 </div>
             </div>

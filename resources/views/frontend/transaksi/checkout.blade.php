@@ -19,20 +19,23 @@
                                     <label>Nama Lengkap
                                         <abbr class="required" title="required">*</abbr>
                                     </label>
-                                    <input type="text" class="form-control" name="nama_lengkap" value="{{ $detailData->nama }}" required />
+                                    <input type="text" class="form-control" name="nama_lengkap"
+                                        value="{{ $detailData->nama }}" required />
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
                             <label>No Telepon <abbr class="required" title="required">*</abbr></label>
-                            <input type="tel" class="form-control" name="no_telp" value="{{ $detailData->no_telp }}" required />
+                            <input type="tel" class="form-control" name="no_telp" value="{{ $detailData->no_telp }}"
+                                required />
                         </div>
                         <div class="select-custom">
                             <label>Provinsi <abbr class="required" title="required">*</abbr></label>
                             <select name="provinsi_id" id="provinsi_id" class="form-control">
                                 <option value="">-- Pilih Provinsi --</option>
                                 @foreach($provinsi as $kp => $vp)
-                                <option value="{{ $vp->id }}" @if(!empty($alamat)) @if($alamat->provinsi_id == $vp->id) selected @endif @endif>{{ $vp->province_name }}</option>
+                                <option value="{{ $vp->id }}" @if(!empty($alamat)) @if($alamat->provinsi_id == $vp->id)
+                                    selected @endif @endif>{{ $vp->province_name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -43,7 +46,8 @@
                                 <option value="">-- Pilih Kota --</option>
                                 @if(!empty($alamat))
                                 @foreach($kota as $kp => $vp)
-                                <option value="{{ $vp->id }}" @if(!empty($alamat)) @if($alamat->kota_id == $vp->id) selected @endif @endif>{{ $vp->city_name }}</option>
+                                <option value="{{ $vp->id }}" @if(!empty($alamat)) @if($alamat->kota_id == $vp->id)
+                                    selected @endif @endif>{{ $vp->city_name }}</option>
                                 @endforeach
                                 @endif
                             </select>
@@ -52,13 +56,16 @@
                         <div class="form-group mb-1 pb-2">
                             <label>Alamat Lengkap
                                 <abbr class="required" title="required">*</abbr></label>
-                            <input type="text" class="form-control" name="alamat_lengkap" value="@if(!empty($alamat)) {{ $alamat->alamat_lengkap }} @endif" placeholder="Alamat Lengkap" required />
+                            <input type="text" class="form-control" name="alamat_lengkap"
+                                value="@if(!empty($alamat)) {{ $alamat->alamat_lengkap }} @endif"
+                                placeholder="Alamat Lengkap" required />
                         </div>
 
                         <div class="form-group">
                             <label>Kode Pos
                                 <abbr class="required" title="required">*</abbr></label>
-                            <input type="text" class="form-control" name="kode_pos" value="@if(!empty($alamat)) {{ $alamat->kode_pos }} @endif" required />
+                            <input type="text" class="form-control" name="kode_pos"
+                                value="@if(!empty($alamat)) {{ $alamat->kode_pos }} @endif" required />
                         </div>
                         <div class="select-custom">
                             <label>Kurir <abbr class="required" title="required">*</abbr></label>
@@ -70,7 +77,8 @@
                             </select>
                         </div>
                         <div class="custom-control custom-radio">
-                            <button id="cekButton" type="button" class="btn btn-primary btn-sm" onclick="retrieveOngkir()" disabled> Cek</button>
+                            <button id="cekButton" type="button" class="btn btn-primary btn-sm"
+                                onclick="retrieveOngkir()" disabled> Cek</button>
                         </div>
                         <input id="berat" name="berat" class="form-control" type="hidden" value="1">
                         <table id="datatable" class="table tbl-bordered tbl-striped">
@@ -84,14 +92,15 @@
                                 </tr>
                             </thead>
                             <tbody id="kurir_table">
-                                
+
                             </tbody>
                         </table>
                         <div class="form-group">
                             <label class="order-comments">Order notes (optional)</label>
-                            <textarea class="form-control" placeholder="Notes about your order, e.g. special notes for delivery."></textarea>
+                            <textarea class="form-control"
+                                placeholder="Notes about your order, e.g. special notes for delivery."></textarea>
                         </div>
-                    
+
                 </li>
             </ul>
         </div>
@@ -109,10 +118,11 @@
                     <tbody>
                         <tr>
                             <td>
-                                <select name="botol_id" id="botol_id" class="form-control"  required>
+                                <select name="botol_id" id="botol_id" class="form-control" required>
                                     <option value="" selected disabled>-- Pilih Botol --</option>
                                     @foreach ($botol as $valBotol)
-                                    <option value="{{ $valBotol->id }}" data-ukuran="{{ $valBotol->ukuran }}">{{ $valBotol->tipe_botol.' '.$valBotol->ukuran }} ml</option>
+                                    <option value="{{ $valBotol->id }}" data-ukuran="{{ $valBotol->ukuran }}">{{
+                                        $valBotol->tipe_botol.' '.$valBotol->ukuran }} ml</option>
                                     @endforeach
                                 </select>
                             </td>
@@ -248,7 +258,7 @@
 
 </script>
 <script>
-    
+
 </script>
 <script>
     document.getElementById('botol_id').addEventListener('change', calculateTotal);

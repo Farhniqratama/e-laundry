@@ -19,7 +19,9 @@
                                 <td>{{ $product->nama_produk }}</td>
                                 <td></td>
                                 <td></td>
-                                <td><span><a href="#uploadModel" data-bs-toggle="modal" class="btn btn-primary" style="float: right;">Tambah Data <i class="menu-icon tf-icons bx bx-plus" style="margin-left: 5px;"></i></a></span></td>
+                                <td><span><a href="#uploadModel" data-bs-toggle="modal" class="btn btn-primary"
+                                            style="float: right;">Tambah Data <i class="menu-icon tf-icons bx bx-plus"
+                                                style="margin-left: 5px;"></i></a></span></td>
                             </tr>
                         </table>
                         <hr>
@@ -34,24 +36,27 @@
                             </thead>
                             <tbody>
                                 @foreach($data AS $key => $value)
-                                    <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td><img src="{{ asset('upload/produk/'.$value->gambar) }}" style="width:100px;"></td>
-                                        <td>
-                                            @if($value->is_thumbnails == 1)
-                                                <i class="menu-icon tf-icons bx bx-check"></i> <b>Current Thumbnails</b>
-                                            @else
-                                                <a href="{{ URL::to('set-as-thumbnail/'.$value->id.'/'.$product->id) }}" class="btn btn-primary btn-sm">
-                                                    <i class="menu-icon tf-icons bx bx-check"></i> Set as Thumbnail
-                                                </a>
-                                            @endif
-                                        </td>
-                                        <td>
-                                            <a href="{{ URL::to('delete-products-images/'.$value->id.'/'.$product->id) }}" class="btn btn-danger" onclick="return confirm('Are you sure.?')">
-                                                <i class="fa fa-trash"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td><img src="{{ asset('upload/produk/'.$value->gambar) }}" style="width:100px;">
+                                    </td>
+                                    <td>
+                                        @if($value->is_thumbnails == 1)
+                                        <i class="menu-icon tf-icons bx bx-check"></i> <b>Current Thumbnails</b>
+                                        @else
+                                        <a href="{{ URL::to('set-as-thumbnail/'.$value->id.'/'.$product->id) }}"
+                                            class="btn btn-primary btn-sm">
+                                            <i class="menu-icon tf-icons bx bx-check"></i> Set as Thumbnail
+                                        </a>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <a href="{{ URL::to('delete-products-images/'.$value->id.'/'.$product->id) }}"
+                                            class="btn btn-danger" onclick="return confirm('Are you sure.?')">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
                                 @endforeach
                             </tbody>
                         </table>
@@ -63,66 +68,77 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" tabindex="-1" id="uploadModel">    
-    <div class="modal-dialog modal-dialog-centered" role="document">        
-        <div class="modal-content modal-sm"> 
-            <a href="#" class="close" data-bs-dismiss="modal" aria-label="Close">                
-                <i class="menu-icon tf-icons bx bx-x" style="font-size:2.5rem;float: right;"></i>           
+<div class="modal fade" tabindex="-1" id="uploadModel">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <a href="#" class="close" data-bs-dismiss="modal" aria-label="Close">
+                <i class="menu-icon tf-icons bx bx-x" style="font-size:2.5rem;float: right;"></i>
             </a>
             <div class="modal-body">
-                <form method="POST" action="{{ URL::to('do-upload-images/'.$product->id) }}" enctype="multipart/form-data">
+                <form method="POST" action="{{ URL::to('do-upload-images/'.$product->id) }}"
+                    enctype="multipart/form-data">
                     @csrf
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label class="form-label" for="default-03">Images</label>
-                            <input type="file" class="form-control" id="imageInput" name="images[]" required="" accept="image/*">
-                        </div>
-                        <div id="more_image"></div><br>
-                        <div id="croppedImagePreview"></div>
+                    <div class="form-group">
+                        <label class="form-label" for="imageInput">Images</label>
+                        <input type="file" class="form-control" id="imageInput" name="images[]" multiple
+                            accept="image/*">
                     </div>
+                    <div id="imagePreviewContainer"></div>
+                    <br>
+                    <div id="croppedImagePreview"></div>
                     <div class="modal-footer">
-                        {{-- <button type="button" class="btn btn-warning" onclick="more_images()">Add More Image</button> --}}
-                        <button type="button" class="btn btn-primary" onclick="cropAndUploadImages()">Crop and Upload</button>
-                    </div>   
-                </form>        
-            </div>   
-        </div>    
+                        <button type="button" class="btn btn-primary" onclick="cropAndUploadImages()">Crop and
+                            Upload</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
+
 <!-- Cropper.js CSS -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
-
 <!-- Cropper.js JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
-<script type="text/javascript">
-    let cropper;
-    let imageElement = document.getElementById('imageInput');
-    let croppedImages = [];
-    let no = 0;
 
-    imageElement.addEventListener('change', function(event) {
+<script type="text/javascript">
+    let croppers = {};  // Object to hold multiple cropper instances
+    let imagePreviewContainer = document.getElementById('imagePreviewContainer');
+    let croppedImagePreviewContainer = document.getElementById('croppedImagePreview');
+
+    document.getElementById('imageInput').addEventListener('change', function(event) {
         let files = event.target.files;
+        imagePreviewContainer.innerHTML = ''; // Clear previous previews
+        croppers = {}; // Reset croppers
+
+        if (files.length === 0) return;
+
         for (let i = 0; i < files.length; i++) {
             let file = files[i];
             if (file && file.type.startsWith('image/')) {
                 let reader = new FileReader();
                 reader.onload = function(e) {
+                    let previewWrapper = document.createElement('div');
+                    previewWrapper.classList.add('image-preview-wrapper');
+
                     let image = document.createElement('img');
                     image.src = e.target.result;
-                    let imagePreviewContainer = document.createElement('div');
-                    imagePreviewContainer.classList.add('image-preview');
-                    imagePreviewContainer.appendChild(image);
-                    document.getElementById('croppedImagePreview').appendChild(imagePreviewContainer);
+                    image.classList.add('preview-image');
 
-                    if (cropper) {
-                        cropper.destroy();
-                    }
-                    cropper = new Cropper(image, {
+                    let cropContainer = document.createElement('div');
+                    cropContainer.classList.add('crop-container');
+                    cropContainer.appendChild(image);
+                    previewWrapper.appendChild(cropContainer);
+                    imagePreviewContainer.appendChild(previewWrapper);
+
+                    let cropper = new Cropper(image, {
                         aspectRatio: 1,
                         viewMode: 1,
                         scalable: true,
-                        cropBoxResizable: true,
+                        cropBoxResizable: true
                     });
+
+                    croppers[file.name] = cropper;
                 };
                 reader.readAsDataURL(file);
             }
@@ -132,47 +148,56 @@
     function cropAndUploadImages() {
         let formData = new FormData();
         let files = document.getElementById('imageInput').files;
-
-        if (!cropper) {
+        
+        if (Object.keys(croppers).length === 0) {
             alert('Silakan pilih gambar untuk di-crop terlebih dahulu.');
             return;
         }
 
+        croppedImagePreviewContainer.innerHTML = ''; // Clear previous cropped images
         let promises = [];
 
         for (let i = 0; i < files.length; i++) {
-            let canvas = cropper.getCroppedCanvas();
+            let file = files[i];
+            let cropper = croppers[file.name];
 
-            if (canvas) {
-                let promise = new Promise(resolve => {
-                    canvas.toBlob(function(blob) {
-                        formData.append('cropped_images[]', blob, files[i].name);
-                        resolve();
-                    }, 'image/jpeg');
-                });
-                promises.push(promise);
+            if (cropper) {
+                let canvas = cropper.getCroppedCanvas();
+
+                if (canvas) {
+                    let promise = new Promise(resolve => {
+                        canvas.toBlob(function(blob) {
+                            formData.append('cropped_images[]', blob, file.name);
+
+                            // Display cropped images before uploading
+                            let croppedImage = document.createElement('img');
+                            croppedImage.src = URL.createObjectURL(blob);
+                            croppedImage.classList.add('cropped-preview-image');
+                            croppedImagePreviewContainer.appendChild(croppedImage);
+
+                            resolve();
+                        }, 'image/jpeg');
+                    });
+
+                    promises.push(promise);
+                }
             }
         }
 
-        // Tunggu semua blob selesai dibuat
         Promise.all(promises).then(() => {
-            // Tambahkan CSRF token
             formData.append('_token', '{{ csrf_token() }}');
 
-            // Kirim data ke server
             fetch("{{ URL::to('do-upload-images/'.$product->id) }}", {
                 method: 'POST',
                 body: formData,
             })
             .then(response => {
-                if (!response.ok) {
-                    throw new Error('Upload gagal');
-                }
+                if (!response.ok) throw new Error('Upload gagal');
                 location.reload();
                 return response.json();
             })
             .then(data => {
-                //alert('Gambar berhasil di-upload');
+                alert('Gambar berhasil di-upload');
                 location.reload();
             })
             .catch(error => {
@@ -182,17 +207,46 @@
     }
 
     function more_images() {
-        var _html_image = '<div id="image-col-'+no+'"><hr>\
-        <div class="form-group">\
-            <label>Images (<a href="#" style="color:red;" onclick="remove_images('+no+')">remove<a>)</label>\
-            <input type="file" class="form-control-file" name="images[]" required="">\
-        </div></div>';
-        $("#more_image").append(_html_image);
-        no+=1;
+        let moreImageContainer = document.createElement('div');
+        moreImageContainer.classList.add('form-group');
+        moreImageContainer.innerHTML = `
+            <label>Images <a href="#" style="color:red;" onclick="remove_images(this)">[Remove]</a></label>
+            <input type="file" class="form-control-file extra-image" name="images[]" accept="image/*">
+        `;
+        document.getElementById("imagePreviewContainer").appendChild(moreImageContainer);
     }
 
-    function remove_images(number) {
-        $("#image-col-"+number).remove();
+    function remove_images(element) {
+        element.parentElement.parentElement.remove();
     }
 </script>
+
+<style>
+    .image-preview-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 10px;
+    }
+
+    .crop-container {
+        width: 100%;
+        max-width: 250px;
+        border: 1px solid #ccc;
+        padding: 5px;
+    }
+
+    .preview-image {
+        width: 100%;
+        height: auto;
+    }
+
+    .cropped-preview-image {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        margin: 5px;
+        border: 1px solid #ddd;
+    }
+</style>
 @endsection

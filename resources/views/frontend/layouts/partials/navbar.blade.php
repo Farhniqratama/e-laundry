@@ -3,7 +3,6 @@
 	.mobile-menu-toggler i,
 	.cart-toggle i {
 		font-size: 24px;
-		/* Adjust this size to match your design */
 		line-height: 1;
 		vertical-align: middle;
 	}
@@ -15,7 +14,6 @@
 		align-items: center;
 		justify-content: center;
 		width: 40px;
-		/* Adjust to match the icon's size */
 		height: 40px;
 	}
 
@@ -28,9 +26,13 @@
 	@media (max-width: 991px) {
 		.mobile-menu-toggler {
 			display: flex !important;
-			/* Ensure it appears */
 			align-items: center;
 			justify-content: center;
+		}
+
+		.main-nav {
+			display: none !important;
+			/* Hide navigation menu on mobile */
 		}
 	}
 
@@ -38,13 +40,11 @@
 	@media (min-width: 992px) {
 		.header-dropdowns {
 			display: flex !important;
-			/* Ensure it's visible on desktops */
 		}
 	}
 
 	.cart-toggle {
 		margin-left: 15px;
-		/* Adjust if needed */
 	}
 
 	/* Ensure the cart count badge is properly positioned */
@@ -62,43 +62,83 @@
 		color: white;
 		border-radius: 50%;
 	}
-</style>
-<div class="header-middle sticky-header">
-	<div class="container-fluid">
-		<div class="header-left flex-1 d-none d-xl-flex">
-			<nav class="main-nav w-100">
-				<ul class="menu ls-n-10">
-					<li><a href="{{ URL::to('/') }}" class="pl-4">Home</a></li>
-					<li><a href="{{ URL::to('list-produk') }}">Produk</a></li>
-					<li class="">
-						<a href="#" class="sf-with-ul">Kategori</a>
-						@php $dataCategories = getKategori(); @endphp
-						<ul style="display: none;">
-							@foreach ($dataCategories as $dc)
-							<li><a href="{{ URL::to('produk-by-kategori/'.$dc->id) }}">{{ $dc->nama_kategori }}</a></li>
-							@endforeach
-						</ul>
-					</li>
-					@if(!empty(session('auth_user')))
-					<li><a href="{{ URL::to('histori-transaksi') }}">Pesanan</a></li>
-					@endif
-				</ul>
-			</nav>
-		</div>
-		<!-- End .header-left -->
 
-		<div class="ml-0 ml-xl-auto">
+	/* Custom Flexbox Styling for Header */
+	.header-middle {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 10px 20px;
+	}
+
+	.logo-container {
+		display: flex;
+		align-items: center;
+		white-space: nowrap;
+		margin-top: 5px;
+		/* Moves the logo slightly downward */
+	}
+
+	.main-nav {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-grow: 1;
+		margin-left: 50px;
+	}
+
+	.menu {
+		display: flex;
+		gap: 15px;
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+
+	.menu li a {
+		text-decoration: none;
+		color: #333;
+		font-weight: bold;
+	}
+</style>
+
+<div class="header-middle sticky-header">
+	<div class="container-fluid d-flex align-items-center justify-content-between">
+		<!-- LOGO (Left) - Moved Slightly Down -->
+		<div class="logo-container">
 			<a href="{{ URL::to('/') }}" class="logo logo-transition">
-				<h2>RENDY PARFUME</h2>
+				<img src="logotama.png" alt="Tama Logo" class="logo-image">
 			</a>
 		</div>
-		<!-- End .header-center -->
 
-		<div class="header-right flex-1 justify-content-end">
+		<!-- NAVIGATION (Hidden on Mobile) -->
+		<nav class="main-nav">
+			<ul class="menu ls-n-10">
+				<li><a href="{{ URL::to('/') }}">Home</a></li>
+				<li><a href="{{ URL::to('list-produk') }}">Produk</a></li>
+				<li>
+					<a href="#" class="sf-with-ul">Kategori</a>
+					@php $dataCategories = getKategori(); @endphp
+					<ul style="display: none;">
+						@foreach ($dataCategories as $dc)
+						<li><a href="{{ URL::to('produk-by-kategori/'.$dc->id) }}">{{ $dc->nama_kategori }}</a></li>
+						@endforeach
+					</ul>
+				</li>
+				@if(!empty(session('auth_user')))
+				<li><a href="{{ URL::to('histori-transaksi') }}">Pesanan</a></li>
+				@endif
+			</ul>
+		</nav>
+
+		<!-- RIGHT SECTION (Cart & Login/Logout) -->
+		<div class="header-right d-flex align-items-center">
+			<!-- Mobile Menu Toggle Button -->
 			<button class="mobile-menu-toggler" type="button">
 				<i class="fas fa-bars"></i>
 			</button>
 
+			<!-- Profile & Authentication Links -->
 			<div class="header-dropdowns d-none d-xl-flex">
 				<div class="header-dropdown">
 					@if(!empty(session('auth_user')))
@@ -107,17 +147,16 @@
 					@else
 					<a href="{{ URL::to('login-user') }}" class="">LOGIN</a>
 					@endif
-					<!-- End .header-menu -->
 				</div>
-				<!-- End .header-dropown -->
 			</div>
-			<!-- End .header-dropdowns -->
+
+			<!-- Cart Section -->
 			<div class="dropdown cart-dropdown">
 				<a href="#" class="dropdown-toggle dropdown-arrow cart-toggle" role="button" data-toggle="dropdown"
 					aria-haspopup="true" aria-expanded="false" data-display="static">
 					<i class="icon-cart-thick"></i>
 					@php
-					$authUser = session('auth_user') ?? null; // Ensure session is not null
+					$authUser = session('auth_user') ?? null;
 					$pelangganId = $authUser && isset($authUser['pelanggan_id']) ? $authUser['pelanggan_id'] : null;
 					$dataCartNya = $pelangganId ? getCart($pelangganId) ?? [] : [];
 					$cartCount = is_array($dataCartNya) ? count($dataCartNya) : 0;
@@ -135,7 +174,7 @@
 
 					<div class="dropdownmenu-wrapper custom-scrollbar">
 						<div class="dropdown-cart-header">Keranjang</div>
-						<!-- End .dropdown-cart-header -->
+
 						@if(!empty(session('auth_user')))
 						@php $dataCartNya = getCart(session('auth_user')['pelanggan_id']); @endphp
 						@else
@@ -157,7 +196,6 @@
 										$valCartNya->harga }}
 									</span>
 								</div>
-								<!-- End .product-details -->
 
 								<figure class="product-image-container">
 									<a href="{{ URL::to('produk-detail/'.$valCartNya->produk_id) }}"
@@ -170,34 +208,22 @@
 										title="Remove Product"><span>×</span></a>
 								</figure>
 							</div>
-							<!-- End .product -->
 						</div>
 						@endforeach
 
-						<!-- End .cart-product -->
-
 						<div class="dropdown-cart-total">
 							<span>SUBTOTAL:</span>
-
 							<span class="cart-total-price float-right">{{ number_format($total,2) }}</span>
 						</div>
-						<!-- End .dropdown-cart-total -->
 
 						<div class="dropdown-cart-action">
-							<a href="{{ URL::to('cart') }}" class="btn btn-gray btn-block view-cart">View
-								Cart</a>
+							<a href="{{ URL::to('cart') }}" class="btn btn-gray btn-block view-cart">View Cart</a>
 							<a href="{{ URL::to('checkout') }}" class="btn btn-dark btn-block">Checkout</a>
 						</div>
-						<!-- End .dropdown-cart-total -->
 
 					</div>
-					<!-- End .dropdownmenu-wrapper -->
 				</div>
-				<!-- End .dropdown-menu -->
 			</div>
 		</div>
-		<!-- End .header-right -->
 	</div>
-	<!-- End .container-fluid -->
 </div>
-<!-- End .header-middle -->

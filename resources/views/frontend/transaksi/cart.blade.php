@@ -2,10 +2,54 @@
 @section('title', __( 'Cart' ))
 @section('content')
 
+<style>
+    .empty-cart-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        text-align: center;
+        padding: 50px;
+        background: #f8f9fa;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        margin-top: 50px;
+        margin-bottom: 50px;
+        /* Added space at the bottom */
+    }
+
+    .empty-cart-icon {
+        font-size: 60px;
+        color: #007bff;
+        margin-bottom: 15px;
+    }
+
+    .empty-cart-text {
+        font-size: 24px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .empty-cart-subtext {
+        font-size: 16px;
+        color: #666;
+        margin-bottom: 20px;
+    }
+
+    .empty-cart-btn {
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        border-radius: 5px;
+    }
+</style>
+
 <div class="container-fluid mt-7">
     <div class="row">
         <div class="col-lg-12">
             <div class="cart-table-container">
+                @if(count($dataCart) > 0)
+                <!-- Check if cart has data -->
                 <table class="table table-cart">
                     <thead>
                         <tr>
@@ -25,15 +69,17 @@
                             <td>
                                 <figure class="product-image-container">
                                     <a href="{{ URL::to('produk-detail/'.$value->produk_id) }}" class="product-image">
-                                        <img src="{{ asset('upload/produk/'.$value->gambar) }}" alt="product" style="width:100px;">
+                                        <img src="{{ asset('upload/produk/'.$value->gambar) }}" alt="product"
+                                            style="width:100px;">
                                     </a>
-
-                                    <a href="{{ URL::to('delete-cart/'.$value->id) }}" class="btn-remove icon-cancel" title="Remove Product"></a>
+                                    <a href="{{ URL::to('delete-cart/'.$value->id) }}" class="btn-remove icon-cancel"
+                                        title="Remove Product"></a>
                                 </figure>
                             </td>
                             <td class="product-col" style="align-content: center;">
                                 <h5 class="product-title">
-                                    <a href="{{ URL::to('produk-detail/'.$value->produk_id) }}">{{ $value->nama_produk }}</a>
+                                    <a href="{{ URL::to('produk-detail/'.$value->produk_id) }}">{{ $value->nama_produk
+                                        }}</a>
                                 </h5>
                             </td>
                             <td style="align-content: center;">
@@ -42,37 +88,53 @@
                                 </span>
                             </td>
                             <td style="align-content: center;">
-                            <div class="quantity">
-                                <button class="quantity-minus qty-btn" data-id="{{ $value->id }}">
-                                    <i class="fa fa-minus"></i>
-                                </button>
-                                <input type="number" class="qty-input" value="{{ $value->qty }}" min="1" max="99" data-id="{{ $value->id }}" readonly>
-                                <button class="quantity-plus qty-btn" data-id="{{ $value->id }}">
-                                    <i class="fa fa-plus"></i>
-                                </button>
-                            </div>
+                                <div class="quantity">
+                                    <button class="quantity-minus qty-btn" data-id="{{ $value->id }}">
+                                        <i class="fa fa-minus"></i>
+                                    </button>
+                                    <input type="number" class="qty-input" value="{{ $value->qty }}" min="1" max="99"
+                                        data-id="{{ $value->id }}" readonly>
+                                    <button class="quantity-plus qty-btn" data-id="{{ $value->id }}">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                </div>
                             </td>
                             <td class="text-right" style="align-content: center;">
-                                <span class="total-payment" data-id="{{ $value->id }}"><bdi><span>Rp </span>{{ number_format($value->harga * $value->qty,2) }}</bdi></span>
+                                <span class="total-payment" data-id="{{ $value->id }}"><bdi><span>Rp </span>{{
+                                        number_format($value->harga * $value->qty,2) }}</bdi></span>
                             </td>
                             <td class="text-right" style="align-content: center;">
-                                <a href="{{ URL::to('delete-cart/'.$value->id) }}" ><i class="fa fa-trash"></i></a>
+                                <a href="{{ URL::to('delete-cart/'.$value->id) }}"><i class="fa fa-trash"></i></a>
                             </td>
                         </tr>
                         @endforeach
                     </tbody>
                 </table>
-            </div><!-- End .cart-table-container -->
 
-            <div class="checkout-methods mb-6" style="width: max-content;float: right;">
-                <a href="{{ URL::to('checkout') }}" class="btn btn-block btn-dark">Proceed to Checkout
-                    <i class="fa fa-arrow-right"></i>
-                </a>
+                <!-- Checkout Button -->
+                <div class="checkout-methods mb-6" style="width: max-content;float: right;">
+                    <a href="{{ URL::to('checkout') }}" class="btn btn-block btn-dark">Proceed to Checkout
+                        <i class="fa fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                @else
+                <!-- Styled Empty Cart Section -->
+                <div class="col-lg-12 d-flex justify-content-center">
+                    <div class="empty-cart-container">
+                        <i class="fas fa-shopping-cart empty-cart-icon"></i>
+                        <p class="empty-cart-text">🛒 Your Cart is Empty</p>
+                        <p class="empty-cart-subtext">Looks like you haven't added anything to your cart yet.</p>
+                        <a href="{{ URL::to('/') }}" class="btn btn-primary empty-cart-btn">Continue Shopping</a>
+                    </div>
+                </div>
+                @endif
             </div>
-        </div><!-- End .col-lg-8 -->
-    </div><!-- End .row -->
-</div><!-- End .container -->
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script> 
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script>
     $(document).ready(function () {
         $(".quantity-minus").off("click").on("click", function (event) {
@@ -134,8 +196,6 @@
             return angka.toLocaleString("id-ID", { style: "currency", currency: "IDR" }).replace("IDR", "Rp ");
         }
     });
-
-
-
 </script>
+
 @endsection

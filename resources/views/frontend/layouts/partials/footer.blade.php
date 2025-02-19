@@ -8,32 +8,13 @@
 					<ul class="contact-info">
 						<li>
 							<span class="contact-info-label">Alamat:</span>
-							Jl. Komp. Listrik, Utan Panjang, Kec. Kemayoran, Kota Jakarta Pusat, Jawa Timur 16451
+							Coming Soon 2026
 						</li>
 						<li>
 							<span class="contact-info-label">Phone:</span>
 							<a href="tel:+6287716816892">0877-1681-6892</a>
 						</li>
 					</ul>
-
-					<!-- Social Media Links -->
-					<div class="social-media-section">
-						<h5 class="social-title">Follow Us</h5>
-						<div class="social-icons">
-							<a href="https://instagram.com" class="social-icon" target="_blank">
-								<img src="{{ asset('instagram.png') }}" alt="Instagram">
-							</a>
-							<a href="https://www.tiktok.com" class="social-icon" target="_blank">
-								<img src="{{ asset('tiktok.png') }}" alt="TikTok">
-							</a>
-							<a href="https://shopee.co.id" class="social-icon" target="_blank">
-								<img src="{{ asset('shopee.png') }}" alt="Shopee">
-							</a>
-							<a href="https://wa.me/6287716816892" class="social-icon" target="_blank">
-								<img src="{{ asset('whatsapp.png') }}" alt="WhatsApp">
-							</a>
-						</div>
-					</div>
 				</div>
 			</div>
 
@@ -65,13 +46,30 @@
 				</div>
 			</div>
 
-			<!-- Working Hours -->
+			<!-- Working Hours & Social Media Grouped -->
 			<div class="col-lg-3 col-md-6 col-sm-12 mb-4">
 				<div class="widget">
 					<h4 class="widget-title">Working Days/Hours</h4>
 					<ul class="contact-info">
 						<li>Mon - Sun / 9:00AM - 8:00PM</li>
 					</ul>
+
+					<!-- Social Media Links (Grouped with Work Days) -->
+					<span class="social-title">Follow us</span>
+					<div class="social-icons">
+						<a href="https://instagram.com" class="social-icon" target="_blank">
+							<img src="{{ asset('instagram.png') }}" alt="Instagram">
+						</a>
+						<a href="https://www.tiktok.com" class="social-icon" target="_blank">
+							<img src="{{ asset('tiktok.png') }}" alt="TikTok">
+						</a>
+						<a href="https://shopee.co.id" class="social-icon" target="_blank">
+							<img src="{{ asset('shopee.png') }}" alt="Shopee">
+						</a>
+						<a href="https://wa.me/6287716816892" class="social-icon" target="_blank">
+							<img src="{{ asset('whatsapp.png') }}" alt="WhatsApp">
+						</a>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -135,7 +133,7 @@
 	/* Social Media Section */
 	.social-media-section {
 		text-align: center;
-		margin-top: 15px;
+		margin-top: 25px;
 	}
 
 	/* Title for Social Media */
@@ -150,19 +148,20 @@
 	.social-icons {
 		display: flex;
 		justify-content: center;
+		margin-top: 10px;
 		align-items: center;
 		flex-wrap: nowrap;
 		gap: 12px;
 		overflow: hidden;
 	}
 
-	/* Social Icons Styling */
+	/* Social Icons Styling - No Rounded Borders */
 	.social-icon img {
 		width: 40px;
 		/* Default size for desktop */
 		height: auto;
-		border-radius: 0 !important;
-		/* Ensure no border circle */
+		border-radius: unset !important;
+		/* Removes any circular styling */
 		background: transparent;
 		transition: transform 0.3s ease;
 	}
@@ -200,27 +199,8 @@
 		}
 
 		.social-icon img {
-			width: 40px;
-		}
-	}
-
-	.footer-bottom {
-		margin-top: 30px;
-		padding: 10px 0;
-		border-top: 1px solid #444;
-	}
-
-	@media (max-width: 768px) {
-		.footer-middle .row {
-			text-align: center;
-		}
-
-		.social-icons {
-			justify-content: center;
-		}
-
-		.social-icon img {
-			width: 40px;
+			width: 35px;
+			/* Adjusted for mobile */
 		}
 	}
 </style>

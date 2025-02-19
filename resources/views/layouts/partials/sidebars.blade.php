@@ -1,9 +1,7 @@
 <!-- ! Hide app brand if navbar-full -->
-<div class="app-brand demo" style="padding-left: 1rem !important;">
-    <a href="{{ URL::to('/dashboard') }}" class="app-brand-link">
-        <span class="app-brand-text demo menu-text fw-bold ms-2" style="text-transform: none;font-size:1.25rem;">
-            <span >TOKO RENDY PARFUM</span>
-        </span>
+<div class="app-brand demo d-flex align-items-center justify-content-center" style="padding-left: 1rem !important;">
+    <a href="{{ URL::to('/dashboard') }}" class="app-brand-link d-flex align-items-center justify-content-center">
+        <img src="tamalogo.png" alt="Tama Logo" class="logo-image" style="height: 9rem; width: auto;">
     </a>
 
     <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
@@ -16,7 +14,7 @@
 @php $link = request()->segment(1); @endphp
 <ul class="menu-inner py-1">
     <li class="menu-item <?php if(empty($link) or $link == 'dashboard'){echo 'active';} ?>">
-        <a href="{{ URL::to('/dashboard') }}" class="menu-link" >
+        <a href="{{ URL::to('/dashboard') }}" class="menu-link">
             <i class="menu-icon tf-icons bx bx-home-circle"></i>
             <div class="text-truncate">Dashboard</div>
         </a>
@@ -28,32 +26,37 @@
             <div class="text-truncate">Users</div>
         </a>
     </li>
-    
-    <li class="menu-item <?php if($link == 'pelanggan' or $link == 'add-pelanggan' or $link == 'edit-pelanggan'){echo 'active';} ?>">
+
+    <li
+        class="menu-item <?php if($link == 'pelanggan' or $link == 'add-pelanggan' or $link == 'edit-pelanggan'){echo 'active';} ?>">
         <a href="{{ URL::to('/pelanggan') }}" class="menu-link">
             <i class="menu-icon tf-icons bx bx-male-female"></i>
             <div class="text-truncate">Pelanggan</div>
         </a>
     </li>
-    <li class="menu-item <?php if($link == 'kategori' or $link == 'add-kategori' or $link == 'edit-kategori'){echo 'active';} ?>">
+    <li
+        class="menu-item <?php if($link == 'kategori' or $link == 'add-kategori' or $link == 'edit-kategori'){echo 'active';} ?>">
         <a href="{{ URL::to('/kategori') }}" class="menu-link">
             <i class="menu-icon tf-icons bx bx-book-open"></i>
             <div class="text-truncate">Kategori</div>
         </a>
     </li>
-    <li class="menu-item <?php if($link == 'produk' or $link == 'add-produk' or $link == 'edit-produk'){echo 'active';} ?>">
+    <li
+        class="menu-item <?php if($link == 'produk' or $link == 'add-produk' or $link == 'edit-produk'){echo 'active';} ?>">
         <a href="{{ URL::to('/produk') }}" class="menu-link">
             <i class="menu-icon tf-icons bx bx-book"></i>
             <div class="text-truncate">Produk</div>
         </a>
     </li>
-    <li class="menu-item <?php if($link == 'botol' or $link == 'add-botol' or $link == 'edit-botol'){echo 'active';} ?>">
+    <li
+        class="menu-item <?php if($link == 'botol' or $link == 'add-botol' or $link == 'edit-botol'){echo 'active';} ?>">
         <a href="{{ URL::to('/botol') }}" class="menu-link">
             <i class="menu-icon tf-icons bx bx-cuboid"></i>
             <div class="text-truncate">Botol</div>
         </a>
     </li>
-    <li class="menu-item <?php if($link == 'banner' or $link == 'add-banner' or $link == 'edit-banner'){echo 'active';} ?>">
+    <li
+        class="menu-item <?php if($link == 'banner' or $link == 'add-banner' or $link == 'edit-banner'){echo 'active';} ?>">
         <a href="{{ URL::to('/banner') }}" class="menu-link">
             <i class="menu-icon tf-icons bx bx-image"></i>
             <div class="text-truncate">Banner</div>
@@ -71,7 +74,8 @@
             <div class="text-truncate">Chat</div>
         </a>
     </li>
-    <li class="menu-item <?php if($link == 'transaksi' or $link == 'add-transaksi' or $link == 'edit-transaksi'){echo 'active';} ?>">
+    <li
+        class="menu-item <?php if($link == 'transaksi' or $link == 'add-transaksi' or $link == 'edit-transaksi'){echo 'active';} ?>">
         <a href="{{ URL::to('/transaksi') }}" class="menu-link">
             <i class="menu-icon tf-icons bx bx-calendar"></i>
             <div class="text-truncate">Pesanan</div>
@@ -84,28 +88,32 @@
             <div class="text-truncate">Laporan Keuangan</div>
         </a>
     </li>
-    <li class="menu-item <?php if($link == 'laporan' or $link == 'add-laporan' or $link == 'edit-laporan'){echo 'active';} ?>">
-        <a href="{{ URL::to('/laporan') }}" class="menu-link">
-            <i class="menu-icon tf-icons bx bx-box"></i>
-            <div class="text-truncate">Laporan Pemesanan</div>
-        </a>
-    </li>
-    
-    @else
-    <li class="menu-item <?php if($link == 'laporan-produk' or $link == 'add-laporan-produk' or $link == 'edit-laporan-produk'){echo 'active';} ?>">
-        <a href="{{ URL::to('/laporan-produk') }}" class="menu-link">
-            <i class="menu-icon tf-icons bx bx-archive"></i>
-            <div class="text-truncate">Laporan Produk</div>
-        </a>
-    </li>
-    <li class="menu-item <?php if($link == 'laporan' or $link == 'add-laporan' or $link == 'edit-laporan'){echo 'active';} ?>">
+    <li
+        class="menu-item <?php if($link == 'laporan' or $link == 'add-laporan' or $link == 'edit-laporan'){echo 'active';} ?>">
         <a href="{{ URL::to('/laporan') }}" class="menu-link">
             <i class="menu-icon tf-icons bx bx-box"></i>
             <div class="text-truncate">Laporan Pemesanan</div>
         </a>
     </li>
 
-    <li class="menu-item <?php if($link == 'laporan-penjualan' or $link == 'add-laporan-penjualan' or $link == 'edit-laporan-penjualan'){echo 'active';} ?>">
+    @else
+    <li
+        class="menu-item <?php if($link == 'laporan-produk' or $link == 'add-laporan-produk' or $link == 'edit-laporan-produk'){echo 'active';} ?>">
+        <a href="{{ URL::to('/laporan-produk') }}" class="menu-link">
+            <i class="menu-icon tf-icons bx bx-archive"></i>
+            <div class="text-truncate">Laporan Produk</div>
+        </a>
+    </li>
+    <li
+        class="menu-item <?php if($link == 'laporan' or $link == 'add-laporan' or $link == 'edit-laporan'){echo 'active';} ?>">
+        <a href="{{ URL::to('/laporan') }}" class="menu-link">
+            <i class="menu-icon tf-icons bx bx-box"></i>
+            <div class="text-truncate">Laporan Pemesanan</div>
+        </a>
+    </li>
+
+    <li
+        class="menu-item <?php if($link == 'laporan-penjualan' or $link == 'add-laporan-penjualan' or $link == 'edit-laporan-penjualan'){echo 'active';} ?>">
         <a href="{{ URL::to('/laporan-penjualan') }}" class="menu-link">
             <i class="menu-icon tf-icons bx bx-book"></i>
             <div class="text-truncate">Laporan Penjualan</div>
