@@ -107,7 +107,7 @@
 		<!-- LOGO (Left) - Moved Slightly Down -->
 		<div class="logo-container">
 			<a href="{{ URL::to('/') }}" class="logo logo-transition">
-				<img src="logotama.png" alt="Tama Logo" class="logo-image">
+				<img src="tamalaundry.png" alt="Tama Logo" class="logo-image">
 			</a>
 		</div>
 

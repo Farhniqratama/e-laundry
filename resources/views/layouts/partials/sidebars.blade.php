@@ -1,7 +1,7 @@
 <!-- ! Hide app brand if navbar-full -->
 <div class="app-brand demo d-flex align-items-center justify-content-center" style="padding-left: 1rem !important;">
     <a href="{{ URL::to('/dashboard') }}" class="app-brand-link d-flex align-items-center justify-content-center">
-        <img src="tamalogo.png" alt="Tama Logo" class="logo-image" style="height: 9rem; width: auto;">
+        <img src="tamalaundry.png" alt="Tama Logo" class="logo-image" style="height: 3rem; width: auto;">
     </a>
 
     <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
